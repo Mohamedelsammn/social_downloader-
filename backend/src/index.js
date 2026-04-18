@@ -15,6 +15,7 @@ app.use(express.json({ limit: '64kb' }));
 app.use(morgan('tiny'));
 
 app.get('/health', (_req, res) => {
+  logger.info(`Health check hit at ${new Date().toISOString()}`);
   res.json({ success: true, status: 'ok', uptime: process.uptime() });
 });
 
@@ -26,10 +27,10 @@ app.use((_req, res) => {
 
 app.use(errorHandler);
 
-const server = app.listen(PORT, '0.0.0.0', () => {
-  const address = server.address();
-  const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + address.port;
-  logger.info(`Luminescent Vault resolver listening on ${bind} (0.0.0.0)`);
+const server = app.listen(PORT, () => {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  logger.info(`Server bound to ${bind}`);
 });
 
 module.exports = app;
