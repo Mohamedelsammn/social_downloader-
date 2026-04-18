@@ -26,8 +26,10 @@ app.use((_req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, '0.0.0.0', () => {
-  logger.info(`Luminescent Vault resolver listening on :${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+  const address = server.address();
+  const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + address.port;
+  logger.info(`Luminescent Vault resolver listening on ${bind} (0.0.0.0)`);
 });
 
 module.exports = app;
