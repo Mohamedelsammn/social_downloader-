@@ -8,8 +8,8 @@ import 'features/downloads_library/presentation/bloc/library_bloc.dart';
 import 'injection_container.dart';
 import 'shell/app_shell.dart';
 
-class LuminescentVaultApp extends StatelessWidget {
-  const LuminescentVaultApp({super.key});
+class SocialDownloaderApp extends StatelessWidget {
+  const SocialDownloaderApp({super.key});
 
   @override
   Widget build(BuildContext context) {

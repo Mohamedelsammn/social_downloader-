@@ -24,10 +24,8 @@ function runYtDlp(url) {
       '--no-playlist',
       '--no-check-certificate',
       '--skip-download',
-      // Prefer a single progressive MP4 so the Flutter client can download
-      // the URL directly without muxing. Fall back to the best available.
-      '-f',
-      'best[ext=mp4]/best',
+      '--format', 'best[ext=mp4]/best',
+      '--add-header', 'User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
       url,
     ];
 

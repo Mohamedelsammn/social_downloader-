@@ -30,11 +30,8 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.menu_rounded),
-          onPressed: () {},
-        ),
         title: const Text(AppConstants.appName),
+        centerTitle: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle_outlined, size: 28),
