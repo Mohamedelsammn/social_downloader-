@@ -177,6 +177,30 @@ async function resolveWithYtDlp(url) {
     throw e;
   }
 
+  // TikTok specialized handling
+  if (url.includes('tiktok.com')) {
+    try {
+      logger.info('Using TikTok specialized API for:', url);
+      const response = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`);
+      const data = await response.json();
+      if (data.code === 0 && data.data) {
+        return {
+          title: data.data.title || 'TikTok Video',
+          downloadUrl: data.data.play, // Unwatermarked
+          type: 'direct',
+          contentType: 'video/mp4',
+          contentLength: null,
+          httpHeaders: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+          },
+          source: 'tiktok-api',
+        };
+      }
+    } catch (err) {
+      logger.warn('TikTok specialized API failed, trying yt-dlp...', err);
+    }
+  }
+
   logger.info('Falling back to yt-dlp for:', url);
   const info = await runYtDlp(url);
   const picked = pickBestFormat(info);
