@@ -1,6 +1,12 @@
 const { spawn } = require('child_process');
 const logger = require('../utils/logger');
 
+console.log('--- PRODUCTION DEBUG INFO ---');
+console.log('PATH:', process.env.PATH);
+console.log('YTDLP_BIN Variable:', process.env.YTDLP_BIN);
+console.log('Current Directory:', process.cwd());
+console.log('-----------------------------');
+
 const YTDLP_BIN = process.env.YTDLP_BIN || 'yt-dlp';
 const YTDLP_TIMEOUT_MS = Number(process.env.YTDLP_TIMEOUT_MS || 30000);
 const YTDLP_ENABLED = process.env.YTDLP_DISABLED !== 'true';
