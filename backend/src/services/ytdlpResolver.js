@@ -24,8 +24,9 @@ function runYtDlp(url) {
       '--no-playlist',
       '--no-check-certificate',
       '--skip-download',
-      '--format', 'best[ext=mp4]/best',
+      '--format', 'best',
       '--impersonate', 'chrome',
+      '--geo-bypass',
       url,
     ];
 
@@ -93,10 +94,8 @@ function runYtDlp(url) {
 
 function _extractYtDlpError(stderr) {
   if (!stderr) return null;
-  const lines = stderr.split('\n').map((l) => l.trim()).filter(Boolean);
-  const errLine = lines.reverse().find((l) => /^error:/i.test(l));
-  if (errLine) return errLine.replace(/^error:\s*/i, '');
-  return lines[lines.length - 1] || null;
+  // Just return the raw stderr clipped to a reasonable length for debugging
+  return stderr.length > 500 ? stderr.substring(0, 500) + '...' : stderr;
 }
 
 /**
