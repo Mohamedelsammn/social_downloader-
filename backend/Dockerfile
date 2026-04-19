@@ -7,10 +7,12 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     python3 \
     python3-pip \
+    libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install latest yt-dlp via pip for better compatibility
-RUN pip3 install --no-cache-dir yt-dlp
+# We use --break-system-packages because Railway uses Debian Bookworm
+RUN pip3 install --no-cache-dir --break-system-packages yt-dlp
 
 # Set working directory
 WORKDIR /app
