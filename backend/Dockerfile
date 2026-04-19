@@ -1,13 +1,16 @@
 # Use Node.js 18 as base
 FROM node:18-slim
 
-# Install Python and yt-dlp requirements
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip curl && \
-    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && \
-    chmod a+rx /usr/local/bin/yt-dlp && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install system dependencies (including python and pip)
+RUN apt-get update && apt-get install -y \
+    curl \
+    ffmpeg \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install latest yt-dlp via pip for better compatibility
+RUN pip3 install --no-cache-dir yt-dlp
 
 # Set working directory
 WORKDIR /app
