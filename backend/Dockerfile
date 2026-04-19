@@ -10,9 +10,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install latest yt-dlp via pip for better compatibility
-# We use --break-system-packages because Railway uses Debian Bookworm
-RUN pip3 install --no-cache-dir --break-system-packages yt-dlp
+# Install latest yt-dlp via pip with extra dependencies for impersonation
+RUN pip3 install --no-cache-dir --break-system-packages yt-dlp requests h2 brotli certifi
 
 # Set working directory
 WORKDIR /app
