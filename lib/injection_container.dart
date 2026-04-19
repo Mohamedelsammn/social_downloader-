@@ -20,6 +20,7 @@ import 'features/downloads_library/domain/usecases/delete_download_usecase.dart'
 import 'features/downloads_library/domain/usecases/get_downloads_usecase.dart';
 import 'features/downloads_library/domain/usecases/share_download_usecase.dart';
 import 'features/downloads_library/presentation/bloc/library_bloc.dart';
+import 'features/settings/presentation/bloc/settings_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -31,7 +32,9 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<Uuid>(() => const Uuid());
 
   // Core
-  sl.registerLazySingleton<DioExceptionMapper>(() => const DioExceptionMapper());
+  sl.registerLazySingleton<DioExceptionMapper>(
+    () => const DioExceptionMapper(),
+  );
   sl.registerLazySingleton<DioClient>(
     () => DioClient.create(mapper: sl<DioExceptionMapper>()),
   );
@@ -66,9 +69,13 @@ Future<void> configureDependencies() async {
 
   // Use cases
   sl.registerLazySingleton(() => ResolveVideoUseCase(sl<DownloadRepository>()));
-  sl.registerLazySingleton(() => DownloadVideoUseCase(sl<DownloadRepository>()));
+  sl.registerLazySingleton(
+    () => DownloadVideoUseCase(sl<DownloadRepository>()),
+  );
   sl.registerLazySingleton(() => GetDownloadsUseCase(sl<LibraryRepository>()));
-  sl.registerLazySingleton(() => DeleteDownloadUseCase(sl<LibraryRepository>()));
+  sl.registerLazySingleton(
+    () => DeleteDownloadUseCase(sl<LibraryRepository>()),
+  );
   sl.registerLazySingleton(() => ShareDownloadUseCase(sl<LibraryRepository>()));
 
   // BLoCs
@@ -84,5 +91,8 @@ Future<void> configureDependencies() async {
       deleteDownload: sl<DeleteDownloadUseCase>(),
       shareDownload: sl<ShareDownloadUseCase>(),
     ),
+  );
+  sl.registerFactory<SettingsBloc>(
+    () => SettingsBloc(sl<SharedPreferences>()),
   );
 }

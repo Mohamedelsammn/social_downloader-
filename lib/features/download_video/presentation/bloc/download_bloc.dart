@@ -24,11 +24,11 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadUiState> {
     required DownloadVideoUseCase downloadVideo,
     UrlValidator validator = const UrlValidator(),
     Future<String?> Function()? clipboardReader,
-  })  : _resolveVideo = resolveVideo,
-        _downloadVideo = downloadVideo,
-        _validator = validator,
-        _clipboardReader = clipboardReader ?? _defaultClipboardReader,
-        super(const DownloadUiState.initial()) {
+  }) : _resolveVideo = resolveVideo,
+       _downloadVideo = downloadVideo,
+       _validator = validator,
+       _clipboardReader = clipboardReader ?? _defaultClipboardReader,
+       super(const DownloadUiState.initial()) {
     on<UrlChanged>(_onUrlChanged);
     on<PasteFromClipboardRequested>(_onPaste);
     on<DownloadRequested>(_onDownloadRequested);
@@ -42,14 +42,16 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadUiState> {
   }
 
   void _onUrlChanged(UrlChanged event, Emitter<DownloadUiState> emit) {
-    emit(state.copyWith(
-      url: event.url,
-      phase: DownloadPhase.idle,
-      clearError: true,
-      clearTitle: true,
-      clearLastSaved: true,
-      progress: 0,
-    ));
+    emit(
+      state.copyWith(
+        url: event.url,
+        phase: DownloadPhase.idle,
+        clearError: true,
+        clearTitle: true,
+        clearLastSaved: true,
+        progress: 0,
+      ),
+    );
   }
 
   Future<void> _onPaste(
@@ -74,20 +76,24 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadUiState> {
 
     final url = state.url.trim();
     if (!_validator.isValid(url)) {
-      emit(state.copyWith(
-        phase: DownloadPhase.failure,
-        errorMessage:
-            'Please paste a valid http or https URL (e.g. https://example.com/video.mp4).',
-        progress: 0,
-      ));
+      emit(
+        state.copyWith(
+          phase: DownloadPhase.failure,
+          errorMessage:
+              'Please paste a valid http or https URL (e.g. https://example.com/video.mp4).',
+          progress: 0,
+        ),
+      );
       return;
     }
 
-    emit(state.copyWith(
-      phase: DownloadPhase.resolving,
-      clearError: true,
-      progress: 0,
-    ));
+    emit(
+      state.copyWith(
+        phase: DownloadPhase.resolving,
+        clearError: true,
+        progress: 0,
+      ),
+    );
 
     final resolveResult = await _resolveVideo(ResolveVideoParams(url));
 
@@ -101,21 +107,23 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadUiState> {
     );
 
     if (resolveFailure != null || resolved == null) {
-      emit(state.copyWith(
-        phase: DownloadPhase.failure,
-        errorMessage: _mapFailure(
-          resolveFailure ?? const UnknownFailure(),
+      emit(
+        state.copyWith(
+          phase: DownloadPhase.failure,
+          errorMessage: _mapFailure(resolveFailure ?? const UnknownFailure()),
+          progress: 0,
         ),
-        progress: 0,
-      ));
+      );
       return;
     }
 
-    emit(state.copyWith(
-      phase: DownloadPhase.downloading,
-      resolvedTitle: resolved.title,
-      progress: 0,
-    ));
+    emit(
+      state.copyWith(
+        phase: DownloadPhase.downloading,
+        resolvedTitle: resolved.title,
+        progress: 0,
+      ),
+    );
 
     final download = await _downloadVideo(
       DownloadVideoParams(
@@ -130,29 +138,33 @@ class DownloadBloc extends Bloc<DownloadEvent, DownloadUiState> {
     );
 
     download.fold(
-      (failure) => emit(state.copyWith(
-        phase: DownloadPhase.failure,
-        errorMessage: _mapFailure(failure),
-      )),
-      (item) => emit(state.copyWith(
-        phase: DownloadPhase.success,
-        progress: 1.0,
-        lastSaved: item,
-        clearError: true,
-      )),
+      (failure) => emit(
+        state.copyWith(
+          phase: DownloadPhase.failure,
+          errorMessage: _mapFailure(failure),
+        ),
+      ),
+      (item) => emit(
+        state.copyWith(
+          phase: DownloadPhase.success,
+          progress: 1.0,
+          lastSaved: item,
+          clearError: true,
+        ),
+      ),
     );
   }
 
   String _mapFailure(Failure failure) => switch (failure) {
-        NetworkFailure() =>
-          'No internet connection. Check your network and try again.',
-        TimeoutFailure() =>
-          'The server took too long to respond. Try again in a moment.',
-        InvalidUrlFailure(:final message) => message,
-        UnsupportedMediaFailure(:final message) => message,
-        DownloadFailure(:final message) => message,
-        CacheFailure(:final message) => message,
-        ServerFailure(:final message) => message,
-        _ => failure.message,
-      };
+    NetworkFailure() =>
+      'No internet connection. Check your network and try again.',
+    TimeoutFailure() =>
+      'The server took too long to respond. Try again in a moment.',
+    InvalidUrlFailure(:final message) => message,
+    UnsupportedMediaFailure(:final message) => message,
+    DownloadFailure(:final message) => message,
+    CacheFailure(:final message) => message,
+    ServerFailure(:final message) => message,
+    _ => failure.message,
+  };
 }

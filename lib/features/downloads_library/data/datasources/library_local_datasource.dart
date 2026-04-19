@@ -49,8 +49,9 @@ class LibraryLocalDataSourceImpl implements LibraryLocalDataSource {
 
   Future<void> _persist(List<DownloadItemModel> items) async {
     try {
-      final encoded =
-          jsonEncode(items.map((e) => e.toJson()).toList(growable: false));
+      final encoded = jsonEncode(
+        items.map((e) => e.toJson()).toList(growable: false),
+      );
       await _prefs.setString(AppConstants.downloadsPrefsKey, encoded);
     } catch (e) {
       throw CacheException('Failed to persist library: $e');

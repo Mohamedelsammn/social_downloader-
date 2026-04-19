@@ -20,10 +20,10 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryUiState> {
     required GetDownloadsUseCase getDownloads,
     required DeleteDownloadUseCase deleteDownload,
     required ShareDownloadUseCase shareDownload,
-  })  : _getDownloads = getDownloads,
-        _deleteDownload = deleteDownload,
-        _shareDownload = shareDownload,
-        super(const LibraryUiState.initial()) {
+  }) : _getDownloads = getDownloads,
+       _deleteDownload = deleteDownload,
+       _shareDownload = shareDownload,
+       super(const LibraryUiState.initial()) {
     on<LibraryLoadRequested>(_onLoad);
     on<LibraryItemShared>(_onShare);
     on<LibraryItemDeleted>(_onDelete);
@@ -36,15 +36,19 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryUiState> {
     emit(state.copyWith(status: LibraryStatus.loading, clearError: true));
     final result = await _getDownloads(const NoParams());
     result.fold(
-      (failure) => emit(state.copyWith(
-        status: LibraryStatus.failure,
-        errorMessage: _map(failure),
-      )),
-      (items) => emit(state.copyWith(
-        status: LibraryStatus.ready,
-        items: items,
-        clearError: true,
-      )),
+      (failure) => emit(
+        state.copyWith(
+          status: LibraryStatus.failure,
+          errorMessage: _map(failure),
+        ),
+      ),
+      (items) => emit(
+        state.copyWith(
+          status: LibraryStatus.ready,
+          items: items,
+          clearError: true,
+        ),
+      ),
     );
   }
 
@@ -54,9 +58,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryUiState> {
   ) async {
     final result = await _shareDownload(ShareDownloadParams(event.item));
     result.fold(
-      (failure) => emit(state.copyWith(
-        transientMessage: _map(failure),
-      )),
+      (failure) => emit(state.copyWith(transientMessage: _map(failure))),
       (_) {},
     );
   }
@@ -76,8 +78,8 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryUiState> {
   }
 
   String _map(Failure failure) => switch (failure) {
-        CacheFailure(:final message) => message,
-        NetworkFailure(:final message) => message,
-        _ => failure.message,
-      };
+    CacheFailure(:final message) => message,
+    NetworkFailure(:final message) => message,
+    _ => failure.message,
+  };
 }

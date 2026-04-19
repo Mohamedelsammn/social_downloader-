@@ -20,7 +20,7 @@ class AppTheme {
         onPrimary: AppColors.onPrimary,
         primaryContainer: AppColors.primaryContainer,
         onPrimaryContainer: AppColors.onPrimary,
-        secondary: AppColors.primary,
+        secondary: AppColors.primaryLight,
         onSecondary: AppColors.onPrimary,
         surface: AppColors.surface,
         onSurface: AppColors.onSurface,
@@ -33,8 +33,8 @@ class AppTheme {
         surfaceDim: AppColors.surfaceDim,
         onSurfaceVariant: AppColors.onSurfaceVariant,
         outlineVariant: AppColors.outlineVariant,
-        error: Color(0xFFFF8A8A),
-        onError: AppColors.onPrimary,
+        error: AppColors.error,
+        onError: Colors.black,
       ),
       textTheme: textTheme.copyWith(
         displaySmall: textTheme.displaySmall?.copyWith(
@@ -66,7 +66,7 @@ class AppTheme {
         ),
         labelLarge: textTheme.labelLarge?.copyWith(
           fontWeight: FontWeight.w600,
-          letterSpacing: 1.4,
+          letterSpacing: 1.2,
         ),
       ),
       appBarTheme: AppBarTheme(
@@ -75,10 +75,9 @@ class AppTheme {
         centerTitle: true,
         iconTheme: const IconThemeData(color: AppColors.onSurface),
         titleTextStyle: textTheme.labelLarge?.copyWith(
-          color: AppColors.primary,
+          color: AppColors.primaryLight,
           fontWeight: FontWeight.w800,
           fontSize: 16,
-          letterSpacing: 3.5,
         ),
       ),
       iconTheme: const IconThemeData(color: AppColors.onSurface),

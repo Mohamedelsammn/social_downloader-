@@ -62,7 +62,7 @@ class DownloadButton extends StatelessWidget {
                           ? AppColors.onSurfaceVariant
                           : AppColors.onPrimary,
                       fontWeight: FontWeight.w700,
-                      fontSize: 16,
+                      fontSize: 18,
                     ),
                   ),
                 ],

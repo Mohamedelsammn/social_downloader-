@@ -9,24 +9,17 @@ import '../../domain/entities/download_item.dart';
 import '../../domain/repositories/library_repository.dart';
 import '../datasources/library_local_datasource.dart';
 
-typedef ShareFilesFn = Future<ShareResult> Function(
-  List<XFile> files, {
-  String? text,
-});
+typedef ShareFilesFn =
+    Future<ShareResult> Function(List<XFile> files, {String? text});
 
 class LibraryRepositoryImpl implements LibraryRepository {
   final LibraryLocalDataSource _local;
   final ShareFilesFn _shareFiles;
 
-  LibraryRepositoryImpl(
-    this._local, {
-    ShareFilesFn? shareFiles,
-  }) : _shareFiles = shareFiles ?? _defaultShare;
+  LibraryRepositoryImpl(this._local, {ShareFilesFn? shareFiles})
+    : _shareFiles = shareFiles ?? _defaultShare;
 
-  static Future<ShareResult> _defaultShare(
-    List<XFile> files, {
-    String? text,
-  }) {
+  static Future<ShareResult> _defaultShare(List<XFile> files, {String? text}) {
     return Share.shareXFiles(files, text: text);
   }
 
@@ -53,7 +46,9 @@ class LibraryRepositoryImpl implements LibraryRepository {
         if (await file.exists()) {
           try {
             await file.delete();
-          } catch (_) {/* best effort */}
+          } catch (_) {
+            /* best effort */
+          }
         }
       }
       return const Right(null);
@@ -73,10 +68,7 @@ class LibraryRepositoryImpl implements LibraryRepository {
           CacheFailure('The file is no longer available on this device.'),
         );
       }
-      await _shareFiles(
-        [XFile(item.localPath)],
-        text: item.title,
-      );
+      await _shareFiles([XFile(item.localPath)], text: item.title);
       return const Right(null);
     } catch (e) {
       return Left(UnknownFailure(e.toString()));

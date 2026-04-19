@@ -19,56 +19,47 @@ class UrlInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 60,
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.08),
-          width: 1,
-        ),
+        color: AppColors.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(50),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       child: Row(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 2, right: 8),
-            child: Icon(Icons.link,
-                color: AppColors.onSurfaceVariant, size: 20),
-          ),
           Expanded(
             child: TextField(
+              onTapOutside: (event) => FocusScope.of(context).unfocus(),
               controller: controller,
               enabled: enabled,
               onChanged: onChanged,
               keyboardType: TextInputType.url,
               textInputAction: TextInputAction.done,
-              style: const TextStyle(
-                color: AppColors.onSurface,
-                fontSize: 15,
-              ),
+              style: const TextStyle(color: AppColors.onSurface, fontSize: 14),
               decoration: const InputDecoration(
-                hintText: 'Paste video URL here',
-                hintStyle: TextStyle(color: AppColors.onSurfaceVariant),
+                hintText: 'Paste a video link…',
+                hintStyle: TextStyle(
+                  color: AppColors.onSurfaceVariant,
+                  fontSize: 18,
+                ),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.symmetric(vertical: 14),
               ),
             ),
           ),
-          TextButton(
+          const SizedBox(width: 4),
+          IconButton(
             onPressed: enabled ? onPastePressed : null,
+            icon: const Icon(Icons.paste),
             style: TextButton.styleFrom(
-              backgroundColor: AppColors.surfaceContainerHigh,
-              foregroundColor: AppColors.onSurface,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              foregroundColor: AppColors.onSurfaceVariant,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-            ),
-            child: const Text(
-              'Paste',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
         ],
