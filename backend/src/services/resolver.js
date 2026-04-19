@@ -152,6 +152,11 @@ async function resolveVideoUrl(parsedUrl) {
       return await resolveWithYtDlp(parsedUrl.toString());
     } catch (err) {
       logger.warn(`yt-dlp fallback failed [${err.code || 'ERR'}]: ${err.message}`);
+      if (err.code === 'YTDLP_FAILED' || err.code === 'YTDLP_NO_FORMAT') {
+        const e = new Error(`Extraction failed: ${err.message}`);
+        e.status = 415; e.code = 'UNSUPPORTED_MEDIA'; e.expose = true;
+        throw e;
+      }
       if (err.code === 'YTDLP_MISSING') {
         const e = new Error(
           'yt-dlp is not installed on the server. Install it or set YTDLP_DISABLED=true.'
@@ -164,7 +169,6 @@ async function resolveVideoUrl(parsedUrl) {
         e.status = 504; e.code = 'TIMEOUT'; e.expose = true;
         throw e;
       }
-      // YTDLP_FAILED, YTDLP_NO_FORMAT, YTDLP_PARSE, YTDLP_DISABLED → unsupported.
     }
   }
 

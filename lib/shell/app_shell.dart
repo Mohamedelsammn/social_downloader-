@@ -30,6 +30,8 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
         title: ShaderMask(
           shaderCallback: (bounds) =>
