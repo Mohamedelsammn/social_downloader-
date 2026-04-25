@@ -1,10 +1,8 @@
-# Luminescent Vault — Video Downloader & Manager
-
-A two-piece educational project:
+# DownHub
 
 - `backend/` — a small Node.js / Express resolver service.
 - `lib/` — a Flutter app built with BLoC + Clean Architecture following the
-  "Luminescent Vault" design system (see `design.md`).
+  "DownHub" design system (see `design.md`).
 
 > **Scope constraint (by design):** the system only supports direct media
 > URLs (e.g. `.mp4`, `.mov`, `.webm`) and public HLS/DASH manifests
